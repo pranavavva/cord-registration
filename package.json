@@ -10,6 +10,8 @@
     "@types/node": "^12.0.0",
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
+    "axios": "^0.21.1",
+    "concurrently": "^6.2.0",
     "http-proxy-middleware": "^2.0.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
@@ -18,8 +20,9 @@
     "web-vitals": "^1.0.1"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "start-api": "cd api && pipenv run flask run --no-debugger",
+    "start:frontend": "react-scripts start",
+    "start:backend": "cd api && pipenv run flask run --no-debugger",
+    "start": "concurrently 'yarn run start:frontend' 'yarn run start:backend'",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
