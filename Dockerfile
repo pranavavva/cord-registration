@@ -20,4 +20,4 @@ ENV FLASK_ENV production
 
 EXPOSE 8000
 WORKDIR /app/api
-CMD gunicorn --worker-tmp-dir /dev/shm -b :8000 api:app
+CMD gunicorn --worker-tmp-dir /dev/shm -b api:app
