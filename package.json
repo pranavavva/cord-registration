@@ -23,8 +23,9 @@
   },
   "scripts": {
     "start:frontend": "react-scripts start",
-    "start:backend": "cd api && pipenv run flask run --no-debugger",
-    "start": "concurrently 'yarn run start:frontend' 'yarn run start:backend'",
+    "start:backend": "cd api && venv/bin/flask run --no-debugger",
+    "dev": "concurrently 'yarn run start:frontend' 'yarn run start:backend'",
+    "start": "cd api && gunicorn api:app",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

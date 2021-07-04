@@ -5,8 +5,6 @@ from flask_restful import Api, Resource, reqparse
 from flask_mongoengine import MongoEngine
 from dotenv import load_dotenv
 
-load_dotenv()
-
 app = Flask(__name__, static_url_path="/", static_folder="../build")
 
 app.config["MONGODB_SETTINGS"] = {"host": os.environ["DATABASE_URL"]}
