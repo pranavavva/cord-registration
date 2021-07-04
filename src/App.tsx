@@ -7,13 +7,7 @@ import axios from 'axios';
 function App() {
 
     const [time, setTime] = useState(0);
-
-    useEffect(() => {
-        axios.get("/api/time").then(res => res.data).then(data => {
-            setTime(data.time);
-        })
-    }, [])
-
+    const [name, setName] = useState("");
 
     return (
         <div className="App">
@@ -28,7 +22,7 @@ function App() {
             <Route exact path="/">
                 <img src={logo} className="App-logo" alt="logo" />
                 <p>
-                  Edit <code>src/App.js</code> and save to reload. I HAVE BEEN EDITED.
+                  Edit <code>src/App.js</code> and save to reload. My last name is {name}.
                 </p>
                 <a
                   className="App-link"
