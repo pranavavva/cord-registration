@@ -53,7 +53,6 @@ class RegistrantAPI(Resource):
         Query a specifc registrant by its registrantId
         """
 
-        args = parser.parse_args()
         registrant = Registrant.objects(registrantId=id).first()
 
         if not registrant:
@@ -83,7 +82,6 @@ class RegistrantAPI(Resource):
         Delete a specific registrant by its registrantId
         """
 
-        args = parser.parse_args()
         registrant = Registrant.objects(registrantId=id).first()
 
         if not registrant:
@@ -98,7 +96,6 @@ class RegistantListAPI(Resource):
         Get a list of all registrants
         """
 
-        args = parser.parse_args()
         return jsonify(Registrant.objects.all())
 
     def post(self):
