@@ -8,7 +8,7 @@ interface Registrant {
     first_name: string;
     last_name: string;
     email: string;
-    registrantId: number;
+    registrant_id: number;
     registration_date: any;
 }
 
@@ -43,7 +43,7 @@ function App() {
                     <h3>{registrant.first_name} {registrant.last_name}</h3>
                     <p>Age: {registrant.age}</p>
                     <p>Email: {registrant.email}</p>
-                    <p>Registant ID: {registrant.registrantId}</p>
+                    <p>Registant ID: {registrant.registrant_id}</p>
                     <p>Registration Date: {convertUTCDateToLocalDate(new Date(registrant.registration_date.$date)).toLocaleDateString()}</p>
                 </div>
                 <hr />

@@ -25,7 +25,7 @@ db.init_app(app)
 
 
 class Registrant(db.Document):
-    registrantId = db.IntField()
+    registrant_id = db.IntField()
     first_name = db.StringField()
     last_name = db.StringField()
     age = db.IntField()
@@ -48,44 +48,42 @@ parser.add_argument(
 
 
 class RegistrantAPI(Resource):
-    def get(self, id):
+    def get(self, registrant_id: int):
         """
-        Query a specifc registrant by its registrantId
+        Query a specifc registrant by its registrant_id
         """
 
-        registrant = Registrant.objects(registrantId=id).first()
+        registrant = Registrant.objects(registrant_id=registrant_id).first()
 
         if not registrant:
-            return jsonify({"error": "data not found"})
+            return {}, 404
         else:
             return jsonify(registrant)
 
-    def put(self, id):
+    def put(self, registrant_id: int):
         """
-        Update a specific registrant by its registrantId
+        Update a specific registrant by its registrant_id
         """
 
-        args = parser.parse_args()
-        args = {k: v for k, v in args.items() if v is not None}
+        args = {k: v for k, v in parser.parse_args().items() if v is not None}
 
-        registrant = Registrant.objects(registrantId=id).first()
+        registrant = Registrant.objects(registrant_id=registrant_id).first()
 
         if not registrant:
-            return jsonify({"error": "data not found"})
+            return {}, 404
         else:
             registrant.update(**args)
+            return {}, 204
 
-            return jsonify(Registrant.objects(registrantId=id).first())
-
-    def delete(self, id):
+    def delete(self, registrant_id: int):
         """
-        Delete a specific registrant by its registrantId
+        Delete a specific registrant by its registrant_id
         """
 
-        registrant = Registrant.objects(registrantId=id).first()
+        registrant = Registrant.objects(registrant_id=registrant_id).first()
 
         if not registrant:
-            return jsonify({"error": "data not found"})
+            return {}, 404
         else:
             return jsonify(registrant.delete())
 
@@ -104,17 +102,10 @@ class RegistantListAPI(Resource):
         """
 
         args = parser.parse_args()
-        registrant = Registrant(
-            registrantId=Registrant.objects.count() + 1,
-            first_name=args["first_name"],
-            last_name=args["last_name"],
-            age=args["age"],
-            email=args["email"],
-            registration_date=args["registration_date"],
-        )
+        registrant = Registrant(registrant_id=Registrant.objects.count() + 1, **args)
 
         return jsonify(registrant.save())
 
 
-api.add_resource(RegistrantAPI, "/api/registrant/<int:id>")
+api.add_resource(RegistrantAPI, "/api/registrant/<int:registrant_id>")
 api.add_resource(RegistantListAPI, "/api/registrants")
