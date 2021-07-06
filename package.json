@@ -22,10 +22,8 @@
     "web-vitals": "^1.0.1"
   },
   "scripts": {
-    "start:frontend": "react-scripts start",
-    "start:backend": "cd api && venv/bin/flask run --no-debugger",
-    "dev": "concurrently 'yarn run start:frontend' 'yarn run start:backend'",
-    "start": "cd api && gunicorn api:app",
+    "dev": "concurrently 'react-scripts start' 'cd api && venv/bin/flask run --no-debugger'",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
