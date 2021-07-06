@@ -31,6 +31,9 @@ class Registrant(db.Document):
     age = db.IntField()
     email = db.StringField()
     registration_date = db.DateTimeField()
+    meta = {
+        "collection": "registrants"
+    }
 
 
 api = Api(app)
