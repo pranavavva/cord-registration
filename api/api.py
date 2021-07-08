@@ -25,52 +25,50 @@ db.init_app(app)
 
 
 class Registrant(db.Document):
-    registrant_id = db.IntField()
-    first_name = db.StringField()
-    last_name = db.StringField()
+    registrantId = db.IntField()
+    firstName = db.StringField()
+    lastName = db.StringField()
     age = db.IntField()
     email = db.StringField()
-    registration_date = db.DateTimeField()
-    meta = {
-        "collection": "registrants"
-    }
+    registrationDate = db.DateTimeField()
+    meta = {"collection": "registrants"}
 
 
 api = Api(app)
 
 parser = reqparse.RequestParser()
-parser.add_argument("first_name", type=str, required=False)
-parser.add_argument("last_name", type=str, required=False)
+parser.add_argument("firstName", type=str, required=False)
+parser.add_argument("lastName", type=str, required=False)
 parser.add_argument("age", type=int, required=False)
 parser.add_argument("email", type=str, required=False)
 parser.add_argument(
-    "registration_date",
+    "registrantId",
     type=lambda date: datetime.date.fromisoformat(date),
     required=False,
 )
 
 
 class RegistrantAPI(Resource):
-    def get(self, registrant_id: int):
+    def get(self, registrantId: int):
         """
-        Query a specifc registrant by its registrant_id
+        Query a specifc registrant by its registrantId
         """
 
-        registrant = Registrant.objects(registrant_id=registrant_id).first()
+        registrant = Registrant.objects(registrantId=registrantId).first()
 
         if not registrant:
             return {}, 404
         else:
             return jsonify(registrant)
 
-    def put(self, registrant_id: int):
+    def put(self, registrantId: int):
         """
-        Update a specific registrant by its registrant_id
+        Update a specific registrant by its registrantId
         """
 
         args = {k: v for k, v in parser.parse_args().items() if v is not None}
 
-        registrant = Registrant.objects(registrant_id=registrant_id).first()
+        registrant = Registrant.objects(registrantId=registrantId).first()
 
         if not registrant:
             return {}, 404
@@ -78,12 +76,12 @@ class RegistrantAPI(Resource):
             registrant.update(**args)
             return {}, 204
 
-    def delete(self, registrant_id: int):
+    def delete(self, registrantId: int):
         """
-        Delete a specific registrant by its registrant_id
+        Delete a specific registrant by its registrantId
         """
 
-        registrant = Registrant.objects(registrant_id=registrant_id).first()
+        registrant = Registrant.objects(registrantId=registrantId).first()
 
         if not registrant:
             return {}, 404
@@ -105,10 +103,10 @@ class RegistantListAPI(Resource):
         """
 
         args = parser.parse_args()
-        registrant = Registrant(registrant_id=Registrant.objects.count() + 1, **args)
+        registrant = Registrant(registrantId=Registrant.objects.count() + 1, **args)
 
         return jsonify(registrant.save())
 
 
-api.add_resource(RegistrantAPI, "/api/registrant/<int:registrant_id>")
+api.add_resource(RegistrantAPI, "/api/registrant/<int:registrantId>")
 api.add_resource(RegistantListAPI, "/api/registrants")

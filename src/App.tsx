@@ -1,38 +1,37 @@
-import React, { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom';
-import axios from 'axios';
+import React, { useEffect, useState } from "react";
+import { BrowserRouter as Router, Route, Link, Switch } from "react-router-dom";
+import axios from "axios";
 
-interface Registrant {
-    _id: any;
+interface IMongoDate {
+    $date: number;
+}
+
+interface IMongoId {
+    $oid: string;
+}
+
+interface IRegistrant {
+    _id: IMongoId;
     age: number;
-    first_name: string;
-    last_name: string;
+    firstName: string;
+    lastName: string;
     email: string;
-    registrant_id: number;
-    registration_date: any;
+    registrantId: number;
+    registrationDate: IMongoDate;
 }
 
-const convertUTCDateToLocalDate = (date: Date): Date => {
-    let newDate = new Date(date.getTime() + date.getTimezoneOffset() * 60 * 1000);
-
-    let offset = date.getTimezoneOffset() / 60;
-    let hours = date.getHours();
-
-    newDate.setHours(hours - offset);
-
-    return newDate;
-}
+const dateFromMillis = (millis: number): Date => {
+    return new Date(millis + new Date().getTimezoneOffset() * 60000);
+};
 
 function App() {
-
-    const [registrants, setRegistrants]: [Registrant[], any] = useState([]);
+    const [registrants, setRegistrants] = useState<IRegistrant[]>([]);
 
     useEffect(() => {
         axios.get("/api/registrants").then((res) => {
             setRegistrants(res.data)
-            console.log(res.data)
-        })
-    }, [])
+        });
+    }, []);
 
     const people = [];
 
@@ -40,25 +39,33 @@ function App() {
         people.push(
             <>
                 <div>
-                    <h3>{registrant.first_name} {registrant.last_name}</h3>
+                    <h3>
+                        {registrant.firstName} {registrant.lastName}
+                    </h3>
                     <p>Age: {registrant.age}</p>
                     <p>Email: {registrant.email}</p>
-                    <p>Registant ID: {registrant.registrant_id}</p>
-                    <p>Registration Date: {convertUTCDateToLocalDate(new Date(registrant.registration_date.$date)).toLocaleDateString()}</p>
+                    <p>Registant ID: {registrant.registrantId}</p>
+                    <p>Registration Date: {dateFromMillis(registrant.registrationDate.$date).toLocaleDateString()}</p>
                 </div>
                 <hr />
             </>
-        )
+        );
     }
+
+    console.log(registrants)
 
     return (
         <div className="App">
             <header className="App-header">
                 <Router>
                     <div>
-                        <Link className="App-link" to="/">Home</Link>
+                        <Link className="App-link" to="/">
+                            Home
+                        </Link>
                         &nbsp;|&nbsp;
-                        <Link className="App-link" to="/page2">Page2</Link>
+                        <Link className="App-link" to="/page2">
+                            Page2
+                        </Link>
                     </div>
                     <Switch>
                         <Route exact path="/">
