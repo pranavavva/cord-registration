@@ -42,7 +42,7 @@ parser.add_argument("lastName", type=str, required=False)
 parser.add_argument("age", type=int, required=False)
 parser.add_argument("email", type=str, required=False)
 parser.add_argument(
-    "registrantId",
+    "registrationDate",
     type=lambda date: datetime.date.fromisoformat(date),
     required=False,
 )
