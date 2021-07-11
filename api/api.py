@@ -104,7 +104,7 @@ class RegistantListAPI(Resource):
         """
 
         args = parser.parse_args()
-        registrant = Registrant(registrantId=Registrant.objects.order_by("-registrantId").first().registrantId + 1, **args)
+        registrant = Registrant(registrantId=Registrant.objects.order_by("-registrantId")[0].registrantId + 1, **args)
         return jsonify(registrant.save())
 
 

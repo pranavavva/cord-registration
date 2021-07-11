@@ -1,9 +1,8 @@
 import { AppBar, IconButton, makeStyles, Theme, Toolbar, Typography, Tooltip } from '@material-ui/core';
 import { Add as AddIcon } from "@material-ui/icons";
-import axios from 'axios';
 import React, { useState } from 'react';
 import { createRegistrant } from '../api/RegistrantsAPI';
-import RegistrantCreateDialog from './RegistrantCreateDialog';
+import RegistrantDialog from './RegistrantDialog';
 
 const useStyles = makeStyles((theme: Theme) => ({
     root: {
@@ -33,12 +32,12 @@ export default function Navbar(): any {
         setDialogOpen(true);
     }
 
-    const handleDialogClosed = () => {
+    const handleDialogClose = () => {
         setDialogOpen(false);
     }
 
     const handleDialogSubmit = (registrant: IRegistrantSubmission) => {
-        handleDialogClosed();
+        handleDialogClose();
 
         createRegistrant({
             firstName: registrant.firstName,
@@ -66,7 +65,7 @@ export default function Navbar(): any {
                     </Tooltip>
                 </Toolbar>
             </AppBar>
-            <RegistrantCreateDialog open={dialogOpen} handleClose={handleDialogClosed} handleSubmit={handleDialogSubmit} />
+            <RegistrantDialog open={dialogOpen} handleClose={handleDialogClose} handleSubmit={handleDialogSubmit} />
         </div>
     )
 }

@@ -1,9 +1,10 @@
 import { Avatar, Card, CardContent, CardHeader, Grid, IconButton, makeStyles, Typography, Menu, MenuItem } from "@material-ui/core";
-import React, { MouseEvent, useEffect, useState } from "react";
+import React, { MouseEvent, useState } from "react";
 import IRegistrant from "../models/IRegistrant";
 import { MoreVert } from "@material-ui/icons";
-import axios from "axios";
-import { deleteRegistrantById } from "../api/RegistrantsAPI";
+import { deleteRegistrantById, updateRegistrantById } from "../api/RegistrantsAPI";
+import RegistrantDialog from "./RegistrantDialog";
+import { IRegistrantSubmission } from "./Navbar";
 
 const dateFromMillis = (millis: number): Date => {
     return new Date(millis + new Date().getTimezoneOffset() * 60000);
@@ -43,14 +44,27 @@ export default function Registrant(props: IProps) {
     const handleDialogOpen = () => {
         handleMenuClose();
         setDialogOpen(true);
-        alert("Dialog open");
     };
+
+    const handleDialogClose = () => {
+        setDialogOpen(false);
+    };
+
+    const handleDialogSubmit = (registrant: IRegistrantSubmission) => {
+        handleDialogClose();
+
+        updateRegistrantById(props.registrant.registrantId, {
+            firstName: registrant.firstName,
+            lastName: registrant.lastName,
+            age: registrant.age,
+            email: registrant.email,
+            registrationDate: new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60 * 1000).toISOString().split("T")[0]
+        });
+    }
 
     const handleDelete = () => {
         handleMenuClose();
-        deleteRegistrantById(props.registrant.registrantId).then(() => {
-            alert("Deleted")
-        });
+        deleteRegistrantById(props.registrant.registrantId);
     };
 
     return (
@@ -88,6 +102,9 @@ export default function Registrant(props: IProps) {
                     <Typography variant="body1" color="textPrimary">Registrant ID: {props.registrant.registrantId}</Typography>
                 </CardContent>
             </Card>
+            <RegistrantDialog open={dialogOpen} handleClose={handleDialogClose} handleSubmit={handleDialogSubmit}
+             firstName={props.registrant.firstName} lastName={props.registrant.lastName}
+              age={props.registrant.age} email={props.registrant.email} />
         </Grid>
     );
 }

@@ -5,15 +5,19 @@ import { IRegistrantSubmission } from "./Navbar";
 interface IProps {
     open: boolean,
     handleClose: () => void,
-    handleSubmit: (registrant: IRegistrantSubmission) => void
+    handleSubmit: (registrant: IRegistrantSubmission) => void,
+    firstName?: string,
+    lastName?: string,
+    email?: string,
+    age?: number
 }
 
-export default function RegistrantCreateDialog(props: IProps) {
+export default function RegistrantDialog(props: IProps) {
 
-    const [firstName, setFirstName] = useState<string>("");
-    const [lastName, setLastName] = useState<string>("");
-    const [email, setEmail] = useState<string>("");
-    const [age, setAge] = useState<number>(0);
+    const [firstName, setFirstName] = useState<string>(props.firstName || "");
+    const [lastName, setLastName] = useState<string>(props.lastName || "");
+    const [email, setEmail] = useState<string>(props.email || "");
+    const [age, setAge] = useState<number>(props.age || 0);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const target = e.target;
@@ -33,10 +37,10 @@ export default function RegistrantCreateDialog(props: IProps) {
 
     return (
         <Dialog open={props.open} onClose={props.handleClose} aria-labelledby="form-dialog-title" maxWidth="sm">
-            <DialogTitle id="form-dialog-title">Add Registrant</DialogTitle>
+            <DialogTitle id="form-dialog-title">{props.firstName ? "Edit" : "Add"} Registrant</DialogTitle>
             <DialogContent>
                 <DialogContentText>
-                    Fill out the fields below to add a new registrant.
+                    Fill out the fields below to {props.firstName ? "edit the" : "add a new"} registrant.
                 </DialogContentText>
                 <Grid container spacing={2}>
                     <Grid item xs={12}><TextField label="First Name" name="firstName" fullWidth={true} onChange={handleChange} value={firstName} /></Grid>
@@ -57,7 +61,7 @@ export default function RegistrantCreateDialog(props: IProps) {
                         age: age
                     })
                 }} color="primary">
-                    Add Registrant
+                    {props.firstName ? "Save" : "Add"} Registrant
                 </Button>
             </DialogActions>
         </Dialog>
