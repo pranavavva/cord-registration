@@ -74,7 +74,7 @@ class RegistrantAPI(Resource):
             return {}, 404
         else:
             registrant.update(**args)
-            return {}, 204
+            return {}
 
     def delete(self, registrantId: int):
         """
@@ -86,7 +86,8 @@ class RegistrantAPI(Resource):
         if not registrant:
             return {}, 404
         else:
-            return jsonify(registrant.delete())
+            jsonify(registrant.delete())
+            return {}
 
 
 class RegistantListAPI(Resource):
@@ -103,10 +104,9 @@ class RegistantListAPI(Resource):
         """
 
         args = parser.parse_args()
-        registrant = Registrant(registrantId=Registrant.objects.count() + 1, **args)
-
+        registrant = Registrant(registrantId=Registrant.objects.order_by("-registrantId").first().registrantId + 1, **args)
         return jsonify(registrant.save())
 
 
-api.add_resource(RegistrantAPI, "/api/registrant/<int:registrantId>")
+api.add_resource(RegistrantAPI, "/api/registrants/<int:registrantId>")
 api.add_resource(RegistantListAPI, "/api/registrants")
